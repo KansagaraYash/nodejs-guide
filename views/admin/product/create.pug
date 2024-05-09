@@ -1,0 +1,21 @@
+extends ../../layouts/main-layout.pug
+
+block styles
+    link(rel="stylesheet", href="/css/product.css")
+    link(rel="stylesheet", href="/css/form.css")
+
+block content
+    main
+        form.product-form(action="/admin/product-add" method="POST")
+            div.form-control
+                label(for="title") Title 
+                input(type="text", name="title", placeholder="Enter product name here..." required)#title
+            div.form-control
+                label(for="description") Description 
+                input(id="description", type="textarea", name="description", placeholder="Enter description here...")
+            div.form-control
+                label(for="imageUrl") Image Url 
+                input(id="imageUrl", type="url", name="imageUrl", placeholder="Paste product image url here...")
+            button.btn(type="submit") Add
+
+                
