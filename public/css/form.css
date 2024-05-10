@@ -7,7 +7,6 @@
     display: block;
     width: 100%;
     margin-bottom: 0.25rem;
-    
 }
 
 .form-control input {
@@ -19,4 +18,12 @@
 
 .form-control input:focus {
     outline-color: #00695c;
+}
+
+.form-control textarea {
+    width: 100%;
+}
+
+.btn {
+    padding: 2px 20px;
 }

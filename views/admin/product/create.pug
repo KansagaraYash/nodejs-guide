@@ -11,11 +11,14 @@ block content
                 label(for="title") Title 
                 input(type="text", name="title", placeholder="Enter product name here..." required)#title
             div.form-control
+                label(for="price") Price 
+                input(type="number", name="price", placeholder="Enter product price here..." required)#price
+            div.form-control
                 label(for="description") Description 
-                input(id="description", type="textarea", name="description", placeholder="Enter description here...")
+                textarea(name="description", rows=5 placeholder="Enter description here...")#description
             div.form-control
                 label(for="imageUrl") Image Url 
-                input(id="imageUrl", type="url", name="imageUrl", placeholder="Paste product image url here...")
+                input(type="url", name="imageUrl", placeholder="Paste product image url here...")#imageUrl
             button.btn(type="submit") Add
 
                 

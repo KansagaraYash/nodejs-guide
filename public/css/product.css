@@ -21,5 +21,9 @@
 }
 
 .product__description {
-    text-align: center;
+    text-align: left;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
 }
