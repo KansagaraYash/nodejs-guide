@@ -2,23 +2,32 @@ const Product = require("../../models/product");
 const Cart = require("../../models/cart");
 
 exports.list = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "All Products",
-      path: "/products",
+  Product.fetchAll()
+    .then(([rows, fields]) => {
+      res.render("shop/product-list", {
+        prods: rows,
+        pageTitle: "All Products",
+        path: "/products",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/index", {
-      prods: products,
-      pageTitle: "Shop",
-      path: "/",
+  Product.fetchAll()
+    .then(([rows, fields]) => {
+      console.log(fields);
+      res.render("shop/index", {
+        prods: rows,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 exports.getCart = (req, res, next) => {
@@ -56,12 +65,12 @@ exports.addToCart = (req, res, next) => {
 exports.deleteToCart = (req, res, next) => {
   const itemId = req.params.id;
 
-  Product.findById(itemId, product => {
+  Product.findById(itemId, (product) => {
     Cart.deleteProduct(itemId, product.price);
 
-    res.redirect('/cart');
-  })
-}
+    res.redirect("/cart");
+  });
+};
 
 exports.getCheckout = (req, res, next) => {
   res.render("shop/checkout", {
@@ -80,11 +89,19 @@ exports.getOrders = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const id = req.params.id;
 
-  Product.findById(id, (product) => {
+  Product.findById(id).then(([rows, fields]) => {
+    console.log(rows);
+    let product = null;
+    if(rows.length > 0 ){
+      product = rows[0];
+    }
+    
     res.render("shop/product-detail", {
       product: product,
-      pageTitle: product.title,
+      pageTitle: rows[0].title,
       path: "/products",
     });
+  }).catch((err) => {
+    console.log(err);    
   });
 };

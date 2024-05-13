@@ -5,27 +5,30 @@ block styles
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
 
 block content 
-    div.product-card
-        div.product-tumb
-            if typeof(product.imageUrl) == 'object'
-                - var url = product.imageUrl[0];
-            else
-                - var url = product.imageUrl;
-            img(src=url, alt="missing image here" srcset="")
-        div.product-details
-            span.product-catagory Women,bag/span
-            h4
-                a(href="#") #{product.title}
-            p #{product.description}
-            div.product-bottom-details
-                div.product-price 
-                    small $96.00 
-                    span $230.99 
-                div.product-links
-                    a(href="") 
-                        i.fa.fa-heart
-                    a(href="/add-to-cart/"+product.id) 
-                        i(class="fa fa-shopping-cart")
+    if(product)
+        div.product-card
+            div.product-tumb
+                if typeof(product.imageUrl) == 'object'
+                    - var url = product.imageUrl[0];
+                else
+                    - var url = product.imageUrl;
+                img(src=url, alt="missing image here" srcset="")
+            div.product-details
+                span.product-catagory Women,bag/span
+                h4
+                    a(href="#") #{product.title}
+                p #{product.description}
+                div.product-bottom-details
+                    div.product-price 
+                        small $96.00 
+                        span $230.99 
+                    div.product-links
+                        a(href="") 
+                            i.fa.fa-heart
+                        a(href="/add-to-cart/"+product.id) 
+                            i(class="fa fa-shopping-cart")
+    else 
+        span Oops,Product not found..!
 
 
 //- main.centered

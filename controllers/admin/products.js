@@ -9,15 +9,20 @@ exports.create = (req, res, next) => {
 
 exports.store = (req, res, next) => {
   const product = new Product(
-    null,
     req.body.title,
     req.body.description,
     req.body.imageUrl,
     req.body.price
   );
-  product.save();
-
-  res.redirect("/");
+  product
+    .save()
+    .then(() => {
+      // console.log(result);
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getProducts = (req, res, next) => {
