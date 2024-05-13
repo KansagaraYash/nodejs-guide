@@ -1,4 +1,112 @@
 extends ../layouts/main-layout.pug
 
+block styles 
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/css/cart.css")
+
 block content 
-    h1 This is cart 
+    if products.length > 0
+        div.wrap.cf
+            //- h1.projTitle
+            //-     span | Responsive Table
+            //-     span -Less
+            //-     span |  Shopping Cart
+            div.heading.cf
+                h1 My Cart
+                a.continue(href='#') Continue Shopping
+            div.cart
+                //
+                    <ul class="tableHead">
+                    <li class="prodHeader">Product</li>
+                    <li>Quantity</li>
+                    <li>Total</li>
+                    <li>Remove</li>
+                    </ul>
+                ul.cartWrap
+                   
+                    //- li.items.odd
+                    //-     div.infoWrap
+                    //-         div.cartSection
+                    //-             img.itemImg(src='http://lorempixel.com/output/technics-q-c-300-300-4.jpg' alt='')
+                    //-             p.itemNumber #QUE-007544-002
+                    //-             h3 Item Name 1
+                    //-             p
+                    //-                 input.qty(type='text' placeholder='3') 
+                    //-                 span x $5.00
+                    //-             p.stockStatus  In Stock
+                    //-         div.prodTotal.cartSection
+                    //-             p $15.00
+                    //-         div.cartSection.removeWrap
+                    //-             a.remove(href='#') x 
+                    if products.length > 0
+                        each product in products 
+                            li.items.even
+                                div.infoWrap
+                                    div.cartSection
+                                        img.itemImg(src=product.productData.imageUrl[0] alt='')
+                                        p.itemNumber #QUE-007544-002
+                                        h3 #{product.productData.title}
+                                        p
+                                            input.qty(type='text' placeholder='3' value =product.qty ) 
+                                            span x $#{product.productData.price}
+                                        p.stockStatus  In Stock
+                                    div.prodTotal.cartSection
+                                        p $ #{product.qty * product.productData.price}
+                                    div.cartSection.removeWrap
+                                        a.remove(href='/delete-to-cart/'+ product.productData.id) x
+                                //- div.special
+                                //-     div.specialContent Free gift with purchase!, gift wrap, etc!!
+                            // <li class="items even">Item 2</li>
+            div.promoCode
+                label(for='promo') Have A Promo Code?
+                input(type='text' name='promo' placeholder='Enter Code')
+                a.btn(href='#')
+            div.subtotal.cf
+                ul
+                    li.totalRow
+                        span.label Subtotal
+                        span.value $35.00
+                    li.totalRow
+                        span.label Shipping
+                        span.value $5.00
+                    li.totalRow
+                        span.label Tax
+                        span.value $4.00
+                    li.totalRow.final
+                        span.label Total
+                        span.value $#{product.totalPrice}
+                    li.totalRow
+                        a.btn.continue(href='#') Checkout
+
+    else
+        h1 No product added..
+
+//- block content 
+//-     if products.length > 0
+//-         div.shopping-cart
+//-             //- <!-- Title -->
+//-             div.title Shopping Bag
+//-             each product in products 
+//-                 //- <!-- Product #1 -->
+//-                 div.item
+//-                     div.buttons
+//-                         a(href="#") 
+//-                             i(class="fa fa-close")
+//-                     div.buttons
+//-                         a(href="#") 
+//-                             i.fa.fa-heart
+//-                     //- div.image
+//-                     //-     img(src=product.productData.imageUrl[0] alt="")
+//-                     div.description
+//-                         span.Common #{product.productData.title}
+//-                     div.quantity
+//-                         button.plus-btn(type="button" name="button")
+//-                             i(class="fa fa-plus")
+//-                             //- img(src="plus.svg" alt="")
+//-                         input(type="text" name="name" value=product.qty)
+//-                         button.minus-btn(type="button" name="button")
+//-                             i(class="fa fa-minus")
+//-                             //- img(src="minus.svg" alt="")
+//-                     div.total-price $ #{product.productData.price}
+//-     else
+//-         h1 No product added..

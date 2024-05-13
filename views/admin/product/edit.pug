@@ -1,4 +1,25 @@
 extends ../../layouts/main-layout.pug
 
-block content 
-    h1 This is admin edit 
+block styles
+    link(rel="stylesheet", href="/css/product.css")
+    link(rel="stylesheet", href="/css/form.css")
+
+block content
+    main
+        form.product-form(action="/admin/product-update" method="POST")
+            div.form-control
+                label(for="title") Title 
+                input(type="text", name="title", value=product.title, placeholder="Enter product name here..." required)#title
+            div.form-control
+                label(for="price") Price 
+                input(type="number", name="price", value=product.price, placeholder="Enter product price here..." required)#price
+            div.form-control
+                label(for="description") Description 
+                textarea(name="description", rows=5, placeholder="Enter description here...")#description #{product.title}
+            div.form-control
+                label(for="imageUrl") Image Url 
+                input(type="url", name="imageUrl", value=product.imageUrl, placeholder="Paste product image url here...")#imageUrl
+            input(type="hidden", name="productId", value=product.id)
+            button.btn(type="submit") Update
+
+                

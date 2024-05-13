@@ -1,25 +1,62 @@
+//- extends ../../layouts/main-layout.pug
+
+//- block styles
+//-     link(rel="stylesheet", href="/css/product.css")
+
+//- block content
+//-     main 
+//-         div.grid
+//-             if prods.length > 0
+//-                 each product in prods
+//-                     article.card.product-item 
+//-                         header.card__header
+//-                             h1.product_title #{product.title}
+//-                         div.card__image
+//-                             - var url = product.imageUrl;
+//-                             img(src=url, alt="image here")
+//-                         div.card__content
+//-                             h2.product__price $#{product.price}
+//-                             p.product__description #{product.description}
+//-                         div.card__actions
+//-                             a.btn(href="/admin/product-edit/"+product.id) Edit
+//-                             form(action="/admin/product-delete", method="post") 
+//-                                 button.btn(type="submit") Delete 
+//-             else 
+//-                 h1 No Product Found.!
+
+
 extends ../../layouts/main-layout.pug
 
 block styles
-    link(rel="stylesheet", href="/css/product.css")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/css/product.css")
 
 block content
     main 
         div.grid
             if prods.length > 0
                 each product in prods
-                    article.card.product-item 
-                        header.card__header
-                            h1.product_title #{product.title}
-                        div.card__image
-                            - var url = product.imageUrl;
-                            img(src=url, alt="image here")
-                        div.card__content
-                            h2.product__price $#{product.price}
-                            p.product__description #{product.description}
-                        div.card__actions
-                            a.btn(href="/admin/product-edit") Edit
-                            form(action="/admin/product-delete", method="post") 
-                                button.btn(type="submit") Delete 
+                    div.product-card
+                        div.product-tumb
+                            if typeof(product.imageUrl) == 'object'
+                                - var url = product.imageUrl[0];
+                            else
+                                - var url = product.imageUrl;
+                            img(src=url, alt="missing image here" srcset="")
+                        div.product-details
+                            span.product-catagory Women,bag/span
+                            h4
+                                a(href="#") #{product.title}
+                            p #{product.description}
+                            div.product-bottom-details
+                                div.product-price 
+                                    small $96.00 
+                                    span $#{product.price} 
+                                div.product-links
+                                    a.btn(href="/admin/product-edit/"+product.id) Edit
+                                    form(action="/admin/product-delete", method="post")
+                                        input(type="hidden", name="productId", value=product.id)
+                                        button.btn(type="submit") Delete 
             else 
                 h1 No Product Found.!
+

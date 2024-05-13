@@ -1,4 +1,43 @@
 extends ../layouts/main-layout.pug
 
+block styles 
+    link(rel="stylesheet" href="/css/product.css")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+
 block content 
-    h1 This is product details 
+    div.product-card
+        div.product-tumb
+            if typeof(product.imageUrl) == 'object'
+                - var url = product.imageUrl[0];
+            else
+                - var url = product.imageUrl;
+            img(src=url, alt="missing image here" srcset="")
+        div.product-details
+            span.product-catagory Women,bag/span
+            h4
+                a(href="#") #{product.title}
+            p #{product.description}
+            div.product-bottom-details
+                div.product-price 
+                    small $96.00 
+                    span $230.99 
+                div.product-links
+                    a(href="") 
+                        i.fa.fa-heart
+                    a(href="/add-to-cart/"+product.id) 
+                        i(class="fa fa-shopping-cart")
+
+
+//- main.centered
+//-     h1 #{product.title}
+//-     hr
+//-     div 
+//-         img(src=product.imageUrl, alt="missing image here" srcset="")
+//-     h2 $#{product.price}
+//-     p #{product.description}
+//-     form(action="/add-to-card" method="POST") 
+//-         input(type="hidden" name="productId" value=product.id)
+//-         button.btn(type="submit") Add to cart 
+
+
+
