@@ -13,7 +13,7 @@ block content
             //-     span |  Shopping Cart
             div.heading.cf
                 h1 My Cart
-                a.continue(href='#') Continue Shopping
+                a.continue(href='/') Continue Shopping
             div.cart
                 //
                     <ul class="tableHead">
@@ -39,21 +39,23 @@ block content
                     //-         div.cartSection.removeWrap
                     //-             a.remove(href='#') x 
                     if products.length > 0
+                        - var totalPrice = 0;
                         each product in products 
                             li.items.even
                                 div.infoWrap
                                     div.cartSection
-                                        img.itemImg(src=product.productData.imageUrl[0] alt='')
-                                        p.itemNumber #QUE-007544-002
-                                        h3 #{product.productData.title}
+                                        img.itemImg(src=product.imageUrl[0] alt='')
+                                        p.itemNumber #QUE-007544-002 #{product.price}
+                                        h3 #{product.title}
                                         p
-                                            input.qty(type='text' placeholder='3' value =product.qty ) 
-                                            span x $#{product.productData.price}
+                                            input.qty(type='text' placeholder='3' value =product.cartItem.quantity ) 
+                                            span x $#{Number.parseFloat(product.price).toFixed(2)}
                                         p.stockStatus  In Stock
                                     div.prodTotal.cartSection
-                                        p $ #{product.qty * product.productData.price}
+                                        - totalPrice += product.cartItem.quantity * product.price
+                                        p $ #{Number.parseFloat(product.cartItem.quantity * product.price).toFixed(2)}
                                     div.cartSection.removeWrap
-                                        a.remove(href='/delete-to-cart/'+ product.productData.id) x
+                                        a.remove(href='/delete-to-cart/'+ product.id) x
                                 //- div.special
                                 //-     div.specialContent Free gift with purchase!, gift wrap, etc!!
                             // <li class="items even">Item 2</li>
@@ -65,18 +67,18 @@ block content
                 ul
                     li.totalRow
                         span.label Subtotal
-                        span.value $35.00
+                        span.value $#{Number.parseFloat(totalPrice).toFixed(2)}
                     li.totalRow
                         span.label Shipping
-                        span.value $5.00
+                        span.value $0.00
                     li.totalRow
                         span.label Tax
-                        span.value $4.00
+                        span.value $0.00
                     li.totalRow.final
                         span.label Total
-                        span.value $#{product.totalPrice}
+                        span.value $#{Number.parseFloat(totalPrice).toFixed(2)}
                     li.totalRow
-                        a.btn.continue(href='#') Checkout
+                        a.btn.continue(href='/create-order') Checkout
 
     else
         h1 No product added..

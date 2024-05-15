@@ -12,7 +12,7 @@ block content
                 input(type="text", name="title", value=product.title, placeholder="Enter product name here..." required)#title
             div.form-control
                 label(for="price") Price 
-                input(type="number", name="price", value=product.price, placeholder="Enter product price here..." required)#price
+                input(type="number", name="price", value=product.price, placeholder="Enter product price here...", step="0.01" required)#price
             div.form-control
                 label(for="description") Description 
                 textarea(name="description", rows=5, placeholder="Enter description here...")#description #{product.title}

@@ -1,4 +1,39 @@
 extends ../layouts/main-layout.pug
 
+block styles 
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="/css/cart.css")
+
 block content 
-    h1 This is your orders 
+    if orders.length > 0
+        div.wrap.cf
+            //- h1.projTitle
+            //-     span | Responsive Table
+            //-     span -Less
+            //-     span |  Shopping Cart
+            div.heading.cf
+                h1 My Orders
+                a.continue(href='/') Continue Shopping
+            div.cart
+                ul.cartWrap
+                    if orders.length > 0
+                        - var totalPrice = 0;
+                        each order in orders 
+                            li.items.even
+                                div.infoWrap
+                                    div.cartSection
+                                        p.itemNumber ##{order.id}
+                                            each product in order.products 
+                                                div.cartSection
+                                                    img.itemImg(src=product.imageUrl alt='')
+                                                    p.itemNumber #QUE-007544-002 #{product.price}
+                                                    h3 #{product.title}
+                                                    p
+                                                        span.qty #{product.orderItem.quantity}
+                                                        span x $#{Number.parseFloat(product.price).toFixed(2)}
+                                                div.prodTotal.cartSection
+                                                    //- - totalPrice += product.cartItem.quantity * product.price
+                                                    p $ #{Number.parseFloat(product.price).toFixed(2)}
+
+    else
+        h1 No order added..
