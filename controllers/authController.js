@@ -1,5 +1,15 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+
+var transporter= nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: null,
+    pass: null
+  }
+});
 
 exports.getLogin = (req, res, next) => {
   // isLoggedIn = req.get('cookie').split('=')[1];
@@ -73,6 +83,14 @@ exports.signup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
+          return transporter.sendMail({
+            to: email,
+            from: "shop@yopmail.com",
+            subject: "Signup succeeded!",
+            html: "<h1>You successfully signed up!</h1>",
+          }).catch(err => {
+            console.log(err);
+          });
         });
     })
     .catch((err) => {
