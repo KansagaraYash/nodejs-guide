@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const adminData = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
+
 // const expressHbs = require("express-handlebars");
 const path = require("path");
 const sequelize = require("./util/database");
@@ -11,6 +13,8 @@ const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
 const Order = require("./models/order");
 const OrderItem = require("./models/order-item");
+const session = require("express-session");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
 
@@ -22,6 +26,16 @@ app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  session({
+    secret: "keyboard cat",
+    store: new SequelizeStore({
+      db: sequelize
+    }),
+    resave: false, // we support the touch method so per the express-session docs this should be set to false
+    proxy: true, // if you do SSL outside of node.
+  })
+);
 app.use((req, res, next) => {
   User.findByPk(1)
     .then((user) => {
@@ -35,12 +49,12 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminData.router);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use((req, res, next) => {
   // res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
   res.status(404).render("404", { pageTitle: "Page Not Found" });
 });
-
 
 // Product model relation
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
@@ -58,14 +72,17 @@ Order.belongsTo(User);
 Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
-  // .sync({force:true})
+  // .sync({ force: true })
   .sync()
   .then((result) => {
-    return User.findByPk(1);
+    return User.findOne({ where:{ email: "yash@yopmail.com"}});
   })
   .then((user) => {
     if (!user) {
-      return User.create({ name: "Yash", email: "yash@yopmail.com" });
+      return User.create({
+        name: "Yash",
+        email: "yash@yopmail.com"
+      });
     }
     return user;
   })

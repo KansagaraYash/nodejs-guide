@@ -18,4 +18,6 @@ router.post("/product-update", adminController.update);
 
 router.post("/product-delete", adminController.delete);
 
+router.get("/pdf", adminController.pdf);
+
 module.exports.router = router;

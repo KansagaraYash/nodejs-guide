@@ -1,4 +1,7 @@
 const Product = require("../../models/product");
+const http = require('https');
+const path = require('path');
+const fs = require('fs');
 
 exports.create = (req, res, next) => {
   res.render("admin/product/create", {
@@ -172,3 +175,52 @@ exports.delete = (req, res, next) => {
       console.log(err);
     });
 };
+
+
+exports.pdf = function (req, response) {
+  getPdf(req, response);
+};
+
+function getPdf (req, response) {
+  var pdfUrl =
+    "https://qkm-oxygene-live.s3.eu-central-1.amazonaws.com/Invoice/INV000019_receipt1265893332.pdf";
+
+  http.get(pdfUrl, function (res) {
+      var chunks = [];
+      res.on("data", function (chunk) {
+        console.log("start");
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        console.log("downloaded");
+        var base64String = new Buffer.concat(chunks).toString("base64");
+
+        const pdfPath = path.join(path.dirname(process.mainModule.filename), 'data/pdf/', `test.pdf`);
+        
+        // Decode base64 string
+        const base64Data = base64String.replace(/^data:application\/pdf;base64,/, '');
+        const pdfBuffer = Buffer.from(base64Data, 'base64');
+
+        // Write buffer to PDF file
+        fs.writeFile(pdfPath, pdfBuffer, (err) => {
+          if (err) {
+            console.error('Error writing PDF file:', err);
+            return res.status(500).send('Error writing PDF file');
+          }
+
+          response.send(`PDF file created successfully at ${pdfPath}`);
+        });
+
+        // console.log("converted to base64");
+        // // response.header("Access-Control-Allow-Origin", "*");
+        // response.header("Access-Control-Allow-Headers", "X-Requested-With");
+        // response.header("content-type", "text/html");
+        // response.header("Sec-Fetch-Dest", "document")
+        // response.send(jsfile);
+      });
+    })
+    .on("error", function () {
+      console.log("error");
+    });
+}

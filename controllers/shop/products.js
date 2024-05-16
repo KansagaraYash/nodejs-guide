@@ -13,6 +13,7 @@ exports.list = (req, res, next) => {
   //   .catch((err) => {
   //     console.log(err);
   //   });
+  const isLoggedIn = req.session.isLoggedIn;
 
   Product.findAll()
     .then((products) => {
@@ -20,6 +21,7 @@ exports.list = (req, res, next) => {
         prods: products,
         pageTitle: "All Products",
         path: "/products",
+        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {
@@ -40,6 +42,7 @@ exports.getIndex = (req, res, next) => {
   //   .catch((err) => {
   //     console.log(err);
   //   });
+  const isLoggedIn = req.session.isLoggedIn;
 
   Product.findAll()
     .then((products) => {
@@ -47,6 +50,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         pageTitle: "Shop",
         path: "/",
+        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {

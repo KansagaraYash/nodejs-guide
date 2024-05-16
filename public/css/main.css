@@ -124,8 +124,10 @@
 
     .main-header__nav {
         height: 100%;
+        width: 100%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
 
     .main-header__item-list {
@@ -140,15 +142,22 @@
         padding: 0;
     }
 
-    .main-header__item a {
-        text-decoration: none;
-        color: 102724;
-    }
-
     .main-header__item a:hover,
     .main-header__item a:active,
-    .main-header__item a.active {
+    .main-header__item a.active,
+    .main-header__item button:hover,
+    .main-header__item button:active {
         color: #7504f7;
+    }
+
+    .main-header__item a,
+    .main-header__item button {
+        font: inherit;
+        background: transparent;
+        border: none;
+        text-decoration: none;
+        color: #102724;
+        cursor: pointer;
     }
 
     .grid {
