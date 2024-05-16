@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 exports.create = (req, res, next) => {
+
   res.render("admin/product/create", {
     pageTitle: "Create Product",
     path: "admin/product-add",
@@ -49,6 +50,7 @@ exports.store = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  
   req.user
     .getProducts()
     .then((products) => {
@@ -83,6 +85,7 @@ exports.edit = (req, res, next) => {
     .getProducts({ where: { id: productId } })
     .then((products) => {
       const product = products[0];
+      
       if (!product) {
         return res.redirect("/");
       }

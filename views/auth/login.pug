@@ -6,13 +6,17 @@ block styles
 
 block content
     main
+        if (typeof errorMessage.error != "undefined" && errorMessage.error.length > 0)
+            div.user-message.user-message--error
+                span #{errorMessage.error}
         form.login-form(action="/login" method="POST")
+            input(type="hidden", name="_csrf" value=csrfToken)
             div.form-control
                 label(for="email") Email 
-                input(type="text", name="email", placeholder="Enter your email here...")#email
+                input(type="text", name="email", placeholder="Enter your email here...", value="yash@yopmail.com")#email
             div.form-control
                 label(for="password") Password 
-                input(type="password", name="password", placeholder="Enter password here...")#password
+                input(type="password", name="password", placeholder="Enter password here...", value="@Yash123")#password
             button.btn(type="submit") Login
 
                 

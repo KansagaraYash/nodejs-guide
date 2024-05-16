@@ -15,8 +15,12 @@ const Order = require("./models/order");
 const OrderItem = require("./models/order-item");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const bcrypt = require("bcryptjs");
+const csrf = require("csurf");
+const flash = require("connect-flash");
 
 const app = express();
+const csrfProtection = csrf();
 
 // app.engine("hdb", expressHbs);
 // app.set("view engine", "hdb");
@@ -30,21 +34,35 @@ app.use(
   session({
     secret: "keyboard cat",
     store: new SequelizeStore({
-      db: sequelize
+      db: sequelize,
     }),
     resave: false, // we support the touch method so per the express-session docs this should be set to false
-    proxy: true, // if you do SSL outside of node.
+    proxy: false, // if you do SSL outside of node.
   })
 );
+app.use(csrfProtection);
+app.use(flash());
+
 app.use((req, res, next) => {
-  User.findByPk(1)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (typeof req.session.user != "undefined") {
+    User.findByPk(req.session.user.id)
+      .then((user) => {
+        req.user = user;
+        next();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    next();
+  }
+});
+
+app.use((req, res, next) => {
+  (res.locals.isAuthenticated = req.session.isLoggedIn),
+    (res.locals.csrfToken = req.csrfToken());
+  res.locals.user = req.session.user;
+  next();
 });
 
 app.use("/admin", adminData.router);
@@ -75,13 +93,19 @@ sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    return User.findOne({ where:{ email: "yash@yopmail.com"}});
+    return User.findOne({ where: { email: "yash@yopmail.com" } });
   })
   .then((user) => {
     if (!user) {
-      return User.create({
-        name: "Yash",
-        email: "yash@yopmail.com"
+      bcrypt.hash("@Yash123", 12).then((hashedPassword) => {
+        return User.create({
+          name: "Yash",
+          email: "yash@yopmail.com",
+          password: hashedPassword, //@Yash123
+          is_premium_user: false,
+          is_admin: true,
+          is_active: true,
+        });
       });
     }
     return user;

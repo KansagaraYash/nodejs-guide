@@ -13,7 +13,6 @@ exports.list = (req, res, next) => {
   //   .catch((err) => {
   //     console.log(err);
   //   });
-  const isLoggedIn = req.session.isLoggedIn;
 
   Product.findAll()
     .then((products) => {
@@ -21,7 +20,6 @@ exports.list = (req, res, next) => {
         prods: products,
         pageTitle: "All Products",
         path: "/products",
-        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {
@@ -42,7 +40,6 @@ exports.getIndex = (req, res, next) => {
   //   .catch((err) => {
   //     console.log(err);
   //   });
-  const isLoggedIn = req.session.isLoggedIn;
 
   Product.findAll()
     .then((products) => {
@@ -50,7 +47,6 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         pageTitle: "Shop",
         path: "/",
-        isAuthenticated: isLoggedIn,
       });
     })
     .catch((err) => {
@@ -73,7 +69,10 @@ exports.getCart = (req, res, next) => {
         })
         .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/");
+    });
 
   // Cart.fetchAll((cart) => {
   //   Product.fetchAll((products) => {
@@ -124,6 +123,9 @@ exports.addToCart = (req, res, next) => {
     })
     .then(() => {
       res.redirect("/cart");
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 

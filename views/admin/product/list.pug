@@ -55,6 +55,7 @@ block content
                                 div.product-links
                                     a.btn(href="/admin/product-edit/"+product.id) Edit
                                     form(action="/admin/product-delete", method="post")
+                                        input(type="hidden", name="_csrf" value=csrfToken)
                                         input(type="hidden", name="productId", value=product.id)
                                         button.btn(type="submit") Delete 
             else 
